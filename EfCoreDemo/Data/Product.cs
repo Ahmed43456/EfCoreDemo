@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace EfCoreDemo.Data
 {
@@ -14,5 +15,7 @@ namespace EfCoreDemo.Data
         public string Name { get; set; }
         [Required]
         public string Color { get; set; }
+
+        public DateTime CreatedDate { get; set; }
     }
 }

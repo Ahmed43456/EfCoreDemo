@@ -1,4 +1,5 @@
-﻿using EfCoreDemo.Data;
+﻿using System.Linq;
+using EfCoreDemo.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EfCoreDemo.Controllers
@@ -12,10 +13,19 @@ namespace EfCoreDemo.Controllers
         }
         public IActionResult Index()
         {
-            var model = db.Products;
+            var model = db.Products
+            .OrderByDescending(p => p.Name)
+            .ToList();
             return View(model);
         }
         [HttpGet]
+        public IActionResult Search(string Item)
+        {
+            var model = db.Products.Where(p => p.Name.Contains(Item)
+                                               || p.Color.Contains(Item))
+            .OrderByDescending(p => p.Name);
+             return View(model); 
+        }
         public IActionResult Create()
         {
             return View();
