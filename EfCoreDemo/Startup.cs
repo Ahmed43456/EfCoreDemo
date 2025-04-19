@@ -31,7 +31,7 @@ namespace EfCoreDemo
            
 
             public ApplicationDbContext CreateDbContext(string[] args)
-            {
+            { 
                 var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
                 optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Initial;Trusted_Connection=True;");
 
@@ -59,6 +59,7 @@ namespace EfCoreDemo
             app.UseRouting();
 
             app.UseAuthorization();
+             
 
             app.UseEndpoints(endpoints =>
             {
