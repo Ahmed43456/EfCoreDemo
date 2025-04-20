@@ -29,8 +29,10 @@ namespace EfCoreDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddIdentity<IdentityUser, IdentityRole>();
-                 
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                         .AddEntityFrameworkStores<ApplicationDbContext>()
+                         .AddDefaultTokenProviders();
+
         }
 
         public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
