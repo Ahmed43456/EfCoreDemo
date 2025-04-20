@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EfCoreDemo.Data;
+using FluentAssertions.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -24,20 +26,29 @@ namespace EfCoreDemo
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-
-       
-       public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+        public void ConfigureServices(IServiceCollection services)
         {
-           
+            services.AddControllersWithViews();
+            services.AddIdentity<IdentityUser, IdentityRole>();
+                 
+        }
+
+        public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+        {
+          
 
             public ApplicationDbContext CreateDbContext(string[] args)
             { 
                 var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
                 optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Initial;Trusted_Connection=True;");
-                
+
                 return new ApplicationDbContext(optionsBuilder.Options);
+
             }
+
+
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
