@@ -29,6 +29,11 @@ namespace EfCoreDemo.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email
+
+               
+
+
+
                 };
                 var result = await userManager.CreateAsync(user);
                 if (result.Succeeded)
@@ -38,9 +43,34 @@ namespace EfCoreDemo.Controllers
                 }
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError("", error.Description);
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
 
+            }
+            return View(model);
+        }
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await signInManager.PasswordSignInAsync(
+                    model.Email,
+                    model.Password,
+                    model.RememberMe,
+                    lockoutOnFailure: false);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError(string.Empty, "محاولة تسجيل دخول غير صالحة");
             }
             return View(model);
         }
