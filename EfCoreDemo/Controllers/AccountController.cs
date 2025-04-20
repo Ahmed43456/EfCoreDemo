@@ -16,6 +16,11 @@ namespace EfCoreDemo.Controllers
             this.userManager = userManager;
             this.signInManager = signInManager; 
         }
+        public IActionResult Register() 
+        {  
+              return View();
+        }
+        [HttpPost]
         public async  Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)

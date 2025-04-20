@@ -28,19 +28,23 @@ namespace EfCoreDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add services to the container.
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllersWithViews();
             services.AddIdentity<IdentityUser, IdentityRole>()
-                         .AddEntityFrameworkStores<ApplicationDbContext>()
-                         .AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+                //.AddDefaultTokenProviders();
+                   services.AddAuthorization();
 
         }
 
-        public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
-        {
-          
+       public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+       {
+
 
             public ApplicationDbContext CreateDbContext(string[] args)
-            { 
+            {
                 var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
                 optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Initial;Trusted_Connection=True;");
 
@@ -69,14 +73,20 @@ namespace EfCoreDemo
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseAuthentication();
+
             app.UseRouting();
 
+
+       
+
             app.UseAuthorization();
-             
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
